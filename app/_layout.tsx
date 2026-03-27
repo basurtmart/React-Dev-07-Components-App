@@ -1,9 +1,12 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-import { Text, View } from 'react-native';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import ThemedText from '@/presentation/shared/ThemedText';
+import ThemedView from '@/presentation/shared/ThemedView';
 import "../global.css";
 
 export const unstable_settings = {
@@ -11,18 +14,21 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  const backgroundColor = useThemeColor({}, 'background');
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <View className='bg-light-background dark:bg-dark-background'>
-        <Text className='mt-10 text-3xl text-light-primary dark:text-dark-primary'>
-          ¡Hola Mundo!
-        </Text>
-      </View>
+    <GestureHandlerRootView style={{ backgroundColor: backgroundColor, flex: 1 }}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ThemedView margin>
+          <ThemedText className='mt-20' type='h1'>
+            ¡Hola Mundo!
+          </ThemedText>
+        </ThemedView>
 
-      {/* <Stack>
+        {/* <Stack>
       </Stack> */}
-    </ThemeProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

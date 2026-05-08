@@ -1,16 +1,25 @@
 import ThemedButton from '@/presentation/shared/ThemedButton';
 import ThemedView from '@/presentation/shared/ThemedView';
 import { useRef } from 'react';
-import { Animated } from 'react-native';
+import { Animated, Easing } from 'react-native';
 
 const Animation101Screen = () => {
   const animatedOpacity = useRef(new Animated.Value(0)).current;
+  const animatedTop = useRef(new Animated.Value(-100)).current;
 
   const fadeIn = () => {
     Animated.timing(animatedOpacity, {
       toValue: 1,
       duration: 300,
       useNativeDriver: true
+    }).start();
+
+    Animated.timing(animatedTop, {
+      toValue: 0,
+      duration: 700,
+      useNativeDriver: true,
+      // easing: Easing.elastic(2),
+      easing: Easing.bounce,
     }).start();
   };
 
@@ -19,7 +28,8 @@ const Animation101Screen = () => {
       toValue: 0,
       duration: 300,
       useNativeDriver: true,
-    }).start();
+      // }).start(() => animatedTop.setValue(-100));
+    }).start(() => animatedTop.resetAnimation());
   };
 
   return (
@@ -32,6 +42,9 @@ const Animation101Screen = () => {
           width: 150,
           height: 150,
           opacity: animatedOpacity,
+          transform: [{
+            translateY: animatedTop
+          }]
         }}
       />
 
